@@ -42,7 +42,7 @@
             font-family: 'Inter', sans-serif; /* Default font for UI elements */
             background-color: #f0f0f0; /* Light gray background for the page */
             display: flex;
-            flex-direction: column; /* Changed to column to stack input and memento */
+            flex-direction: column; /* Changed to column to stack input and invitation */
             justify-content: flex-start; /* Align to start */
             align-items: center;
             min-height: 100vh; /* Minimum height for full viewport */
@@ -53,7 +53,7 @@
         /* Specific styles for the invitation text to ensure ample space and classic feel */
         .invitation-text {
             font-family: 'Lora', serif; /* A classic serif font for the invitation content */
-            line-height: 2.0; /* Adjusted line height for better spacing */
+            line-height: 1.8; /* Adjusted line height for better spacing */
             font-size: 1.25rem; /* Base font size */
         }
 
@@ -215,18 +215,10 @@
 <body class="bg-gray-100 p-8 flex flex-col items-center">
 
     <div class="input-section-container bg-white p-8 rounded-xl shadow-lg mb-8 w-full max-w-md">
-        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Generate Invitation Card</h2>
+        <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Generate Dignitary Invitation Card</h2>
         <div class="input-group">
-            <label for="eventDateInput">Event Date:</label>
-            <input type="date" id="eventDateInput" class="focus:ring-blue-500 focus:border-blue-500">
-        </div>
-        <div class="input-group">
-            <label for="eventTimeInput">Event Time:</label>
-            <input type="time" id="eventTimeInput" class="focus:ring-blue-500 focus:border-blue-500">
-        </div>
-        <div class="input-group">
-            <label for="venueInput">Venue:</label>
-            <input type="text" id="venueInput" placeholder="Enter venue address" class="focus:ring-blue-500 focus:border-blue-500">
+            <label for="dignitaryNameInput">Dignitary's Name:</label>
+            <input type="text" id="dignitaryNameInput" placeholder="Enter dignitary's name" class="focus:ring-blue-500 focus:border-blue-500">
         </div>
         <button id="generatePdfBtn" class="btn-primary w-full mb-2">Generate Invitation PDF</button>
         <button id="downloadImageBtn" class="btn-secondary w-full">Download Invitation as Image</button>
@@ -254,19 +246,21 @@
                     </div>
 
                     <div class="invitation-text text-gray-800 px-4 mb-auto">
+                        <p class="mb-4">
+                           With immense pleasure, the members of the Sishu Mangal Parsat
+                           cordially request the honor of the distinguished presence of
+                        </p>
+                        <p class="mb-8" style="font-size: 1.5rem; font-weight: 700;">
+                            <span id="dignitaryNamePlaceholder" class="text-dark-maroon inline-block border-b-2 border-dark-maroon pb-1"></span>
+                        </p>
                         <p class="mb-6">
-                            The honor and privilege of your presence is cordially solicited on the auspicious occasion of our
-                            <span class="text-maroon-700">Golden Jubilee</span> celebration.
+                            on the joyous occasion of our Golden Jubilee Celebration.
+                            Your presence would greatly honor this significant milestone.
                         </p>
-                        <p class="text-dark-maroon mb-2" style="font-size: 1.15rem; font-weight: 600;">
-                            Date: <span id="eventDatePlaceholder" class="inline-block border-b border-black pb-1"></span>
-                        </p>
-                        <p class="text-dark-maroon mb-2" style="font-size: 1.15rem; font-weight: 600;">
-                            Time: <span id="eventTimePlaceholder" class="inline-block border-b border-black pb-1"></span>
-                        </p>
-                        <p class="text-dark-maroon mb-2" style="font-size: 1.15rem; font-weight: 600;">
-                            Venue: <span id="venuePlaceholder" class="inline-block border-b border-black pb-1"></span>
-                        </p>
+
+                        <p class="text-maroon-700 font-bold mb-2">Date: 30th & 31st August</p>
+                        <p class="text-maroon-700 font-bold mb-2">Time: 11 AM to 7 PM</p>
+                        <p class="text-maroon-700 font-bold mb-2">Venue: Rabindra Bhavan, Krishnagar</p>
                     </div>
 
                     <div class="mt-12 flex justify-center items-end w-full gap-x-24 pb-4">
@@ -288,22 +282,16 @@
 
     <script>
         // Get references to input fields and the button
-        const eventDateInput = document.getElementById('eventDateInput');
-        const eventTimeInput = document.getElementById('eventTimeInput');
-        const venueInput = document.getElementById('venueInput');
+        const dignitaryNameInput = document.getElementById('dignitaryNameInput');
         const generatePdfBtn = document.getElementById('generatePdfBtn');
         const downloadImageBtn = document.getElementById('downloadImageBtn');
 
-        // Get references to the placeholders in the invitation
-        const eventDatePlaceholder = document.getElementById('eventDatePlaceholder');
-        const eventTimePlaceholder = document.getElementById('eventTimePlaceholder');
-        const venuePlaceholder = document.getElementById('venuePlaceholder');
+        // Get reference to the placeholder in the invitation
+        const dignitaryNamePlaceholder = document.getElementById('dignitaryNamePlaceholder');
 
         // Function to update invitation content
         function updateInvitationContent() {
-            eventDatePlaceholder.textContent = eventDateInput.value.trim();
-            eventTimePlaceholder.textContent = eventTimeInput.value.trim();
-            venuePlaceholder.textContent = venueInput.value.trim();
+            dignitaryNamePlaceholder.textContent = dignitaryNameInput.value.trim() || "Respected Dignitary";
         }
 
         // Add event listener to the button for PDF generation
@@ -313,7 +301,7 @@
             // Configuration for html2pdf
             const options = {
                 margin: [0, 0, 0, 0], // No margins, as the container is already A4 sized
-                filename: `Sishu_Mangal_Parsat_Invitation_${eventDateInput.value.trim() || 'Generic'}.pdf`, // Dynamic filename
+                filename: `Sishu_Mangal_Parsat_Invitation_${dignitaryNameInput.value.trim() || 'Generic'}.pdf`, // Dynamic filename
                 image: { type: 'jpeg', quality: 0.98 }, // Image quality for rendering HTML elements
                 html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true }, // Scale for better resolution
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // A4 portrait, unit in mm
@@ -334,7 +322,7 @@
                 // Create a temporary link element to trigger download
                 const link = document.createElement('a');
                 link.href = imageUrl;
-                link.download = `Sishu_Mangal_Parsat_Invitation_${eventDateInput.value.trim() || 'Generic'}.png`;
+                link.download = `Sishu_Mangal_Parsat_Invitation_${dignitaryNameInput.value.trim() || 'Generic'}.png`;
                 document.body.appendChild(link); // Append to body to make it clickable
                 link.click(); // Programmatically click the link
                 document.body.removeChild(link); // Clean up
@@ -342,6 +330,11 @@
                 console.error('Error generating image:', error);
                 // You might want to show a user-friendly message here
             });
+        });
+
+        // Set a default value on load
+        window.addEventListener('load', () => {
+            dignitaryNamePlaceholder.textContent = "Respected Dignitary";
         });
     </script>
 </body>
